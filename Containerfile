@@ -3,7 +3,10 @@ FROM klakegg/hugo:ext-alpine-ci
 # + link checker e.g. https://github.com/wjdp/htmltest
 RUN wget https://htmltest.wjdp.uk -O - | bash -s -- -b /usr/local/bin
 
+# + markdown linter (https://github.com/DavidAnson/markdownlint-cli2)
+RUN npm install markdownlint-cli2 --global
+
+
 # to be installed and configured
-# + markdown linter
 # + spell checker
 # + hemingway scorer
