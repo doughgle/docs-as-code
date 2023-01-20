@@ -1,4 +1,4 @@
-name: Daily build, publish and sign
+name: Weekly build, publish and sign
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -7,7 +7,7 @@ name: Daily build, publish and sign
 
 on:
   schedule:
-    - cron: '44 13 * * *'
+    - cron: '44 13 * * 1'
   push:
     branches: [ "main" ]
     # Publish semver tags as releases.
