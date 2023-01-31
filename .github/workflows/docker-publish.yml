@@ -6,6 +6,7 @@ name: Weekly build, publish and sign
 # documentation.
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '44 13 * * 1'
   push:
