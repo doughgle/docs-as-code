@@ -13,3 +13,5 @@ RUN npm install markdown-spellcheck --global
 # to be installed and configured
 # + hemingway scorer (https://github.com/btford/write-good)
 RUN npm install write-good --global
+
+USER hugo:hugo
