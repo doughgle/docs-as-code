@@ -1,8 +1,7 @@
-FROM ghcr.io/gohugoio/hugo:v0.136.5
+FROM klakegg/hugo:ext-alpine-ci
 
-USER root
 # + link checker e.g. https://github.com/wjdp/htmltest
-RUN wget https://htmltest.wjdp.uk -O - | ash -s -- -b /usr/local/bin
+RUN wget https://htmltest.wjdp.uk -O - | bash -s -- -b /usr/local/bin
 
 # + markdown linter (https://github.com/DavidAnson/markdownlint-cli2)
 RUN npm install markdownlint-cli2 --global
@@ -13,5 +12,3 @@ RUN npm install markdown-spellcheck --global
 # to be installed and configured
 # + hemingway scorer (https://github.com/btford/write-good)
 RUN npm install write-good --global
-
-USER hugo:hugo
