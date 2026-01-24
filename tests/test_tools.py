@@ -1,7 +1,8 @@
 """Unit tests for MCP server tools."""
 
 import pytest
-from hypothesis import given, strategies as st
+from hypothesis import given
+from hypothesis import strategies as st
 
 from mcp_server_template.server import call_tool, list_tools
 

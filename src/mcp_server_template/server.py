@@ -15,14 +15,12 @@ from typing import Any
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp.types import (
-    Tool,
-    TextContent,
-    ImageContent,
-    EmbeddedResource,
-    Prompt,
-    PromptMessage,
     GetPromptResult,
-    INTERNAL_ERROR,
+    Prompt,
+    PromptArgument,
+    PromptMessage,
+    TextContent,
+    Tool,
 )
 
 # Configure logging
@@ -113,22 +111,22 @@ async def list_prompts() -> list[Prompt]:
             name="greeting",
             description="A friendly greeting prompt",
             arguments=[
-                {
-                    "name": "style",
-                    "description": "The greeting style (formal or casual)",
-                    "required": False,
-                }
+                PromptArgument(
+                    name="style",
+                    description="The greeting style (formal or casual)",
+                    required=False,
+                )
             ],
         ),
         Prompt(
             name="code_review",
             description="A prompt template for code review",
             arguments=[
-                {
-                    "name": "language",
-                    "description": "Programming language",
-                    "required": True,
-                }
+                PromptArgument(
+                    name="language",
+                    description="Programming language",
+                    required=True,
+                )
             ],
         ),
     ]
@@ -204,7 +202,7 @@ async def read_resource(uri: str) -> str:
     """Read a specific resource."""
     if uri == "template://info":
         return """MCP Server Template
-        
+
 This is a template repository for creating MCP servers. It includes:
 - Tools: Functions the LLM can call
 - Prompts: Pre-defined prompt templates
@@ -219,7 +217,7 @@ Use this as a starting point for your own MCP server!
 # Using the hello tool
 result = await call_tool("hello", {"name": "Alice"})
 
-# Using the add tool  
+# Using the add tool
 result = await call_tool("add", {"a": 5, "b": 3})
 
 # Using prompts

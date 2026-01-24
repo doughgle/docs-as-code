@@ -1,9 +1,10 @@
 """Unit tests for MCP server prompts."""
 
 import pytest
-from hypothesis import given, strategies as st
+from hypothesis import given
+from hypothesis import strategies as st
 
-from mcp_server_template.server import list_prompts, get_prompt
+from mcp_server_template.server import get_prompt, list_prompts
 
 
 class TestPrompts:
