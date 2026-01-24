@@ -16,7 +16,7 @@ COPY --from=hugo /usr/bin/hugo /usr/local/bin/
 
 # Install Node Tools
 COPY package.json /tmp/package.json
-RUN npm install -g markdownlint-cli2 markdown-spellcheck write-good
+RUN npm install -g markdownlint-cli2
 
 # Set working directory
 WORKDIR /src
