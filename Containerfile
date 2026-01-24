@@ -1,7 +1,7 @@
 # Source Stages (Dependabot tracks these)
-FROM jdkato/vale:latest as vale
-FROM wjdp/htmltest:latest as htmltest
-FROM hugomods/hugo:exts as hugo
+FROM jdkato/vale:latest AS vale
+FROM wjdp/htmltest:latest AS htmltest
+FROM hugomods/hugo:exts AS hugo
 
 # Final Stage
 FROM node:20-alpine
@@ -11,12 +11,13 @@ RUN apk add --no-cache bash git
 
 # Copy Binaries from source stages
 COPY --from=vale /bin/vale /usr/local/bin/
-COPY --from=htmltest /usr/local/bin/htmltest /usr/local/bin/
+COPY --from=htmltest /bin/htmltest /usr/local/bin/
 COPY --from=hugo /usr/bin/hugo /usr/local/bin/
 
 # Install Node Tools
 COPY package.json /tmp/package.json
-RUN npm install -g markdownlint-cli2 markdown-spellcheck write-good
+RUN npm config set strict-ssl false && \
+    npm install -g markdownlint-cli2 markdown-spellcheck write-good
 
 # Set working directory
 WORKDIR /src
