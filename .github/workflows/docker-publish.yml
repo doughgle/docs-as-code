@@ -96,19 +96,23 @@ jobs:
       # Verify tool versions (compatibility with build.yml)
       - name: Verify Tool Versions
         run: |
-          docker run --rm ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }} \
+          # Extract first tag from the tags list
+          IMAGE_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
+          docker run --rm ${IMAGE_TAG} \
           bash -c "vale --version && markdownlint-cli2 --version && htmltest --version && hugo version"
 
       # Verify interactive bash (README usage)
       - name: Verify Interactive Bash
         run: |
-          docker run --rm ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }} \
+          IMAGE_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
+          docker run --rm ${IMAGE_TAG} \
           bash -c "echo 'Interactive bash successfully executed'"
 
       # Verify Hugo server (README usage)
       - name: Verify Hugo Server
         run: |
-          docker run --rm ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }} \
+          IMAGE_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
+          docker run --rm ${IMAGE_TAG} \
           hugo server --help
 
 
