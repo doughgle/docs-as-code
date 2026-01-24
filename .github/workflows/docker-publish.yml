@@ -93,26 +93,29 @@ jobs:
           cache-to: type=gha,mode=max
           load: ${{ github.event_name == 'pull_request' }}
 
+      # Extract image tag for verification
+      - name: Set image tag for verification
+        id: image-tag
+        run: |
+          IMAGE_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
+          echo "tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+
       # Verify tool versions (compatibility with build.yml)
       - name: Verify Tool Versions
         run: |
-          # Extract first tag from the tags list
-          IMAGE_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
-          docker run --rm ${IMAGE_TAG} \
+          docker run --rm ${{ steps.image-tag.outputs.tag }} \
           bash -c "vale --version && markdownlint-cli2 --version && htmltest --version && hugo version"
 
       # Verify interactive bash (README usage)
       - name: Verify Interactive Bash
         run: |
-          IMAGE_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
-          docker run --rm ${IMAGE_TAG} \
+          docker run --rm ${{ steps.image-tag.outputs.tag }} \
           bash -c "echo 'Interactive bash successfully executed'"
 
       # Verify Hugo server (README usage)
       - name: Verify Hugo Server
         run: |
-          IMAGE_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
-          docker run --rm ${IMAGE_TAG} \
+          docker run --rm ${{ steps.image-tag.outputs.tag }} \
           hugo server --help
 
 
