@@ -39,7 +39,7 @@ dev = [
 ]
 
 [project.scripts]
-mcp-server-template = "mcp_server_template.server:main"
+mcp-server-template = "mcp_server_template.server:run"
 
 [tool.setuptools.packages.find]
 where = ["src"]
