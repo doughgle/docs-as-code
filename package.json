@@ -1,0 +1,11 @@
+{
+  "name": "docs-as-code",
+  "version": "1.0.0",
+  "description": "Builder container image for docs as code",
+  "dependencies": {
+    "markdownlint-cli2": "^0.15.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

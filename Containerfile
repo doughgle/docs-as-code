@@ -1,20 +1,22 @@
-FROM klakegg/hugo:ext-alpine-ci
+# Source Stages (Dependabot tracks these)
+FROM jdkato/vale:latest AS vale
+FROM wjdp/htmltest:latest AS htmltest
+FROM hugomods/hugo:exts AS hugo
 
-# + link checker e.g. https://github.com/wjdp/htmltest
-RUN wget https://htmltest.wjdp.uk -O - | bash -s -- -b /usr/local/bin
+# Final Stage
+FROM node:20-alpine
 
-# + markdown linter (https://github.com/DavidAnson/markdownlint-cli2)
-RUN npm install markdownlint-cli2 --global
+# Install System Dependencies
+RUN apk add --no-cache bash git
 
-# + spell checker (https://github.com/lukeapage/node-markdown-spellcheck)
-RUN npm install markdown-spellcheck --global
+# Copy Binaries from source stages
+COPY --from=vale /bin/vale /usr/local/bin/
+COPY --from=htmltest /bin/htmltest /usr/local/bin/
+COPY --from=hugo /usr/bin/hugo /usr/local/bin/
 
-# to be installed and configured
-# + hemingway scorer (https://github.com/btford/write-good)
-RUN npm install write-good --global
+# Install Node Tools
+COPY package.json /tmp/package.json
+RUN npm install -g markdownlint-cli2
 
-# + writing style linter (https://github.com/errata-ai/vale)
-ENV VALE_VERSION=3.8.0
-RUN wget https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz \
-    && tar -xzf vale_${VALE_VERSION}_Linux_64-bit.tar.gz vale -C /usr/local/bin \
-    && rm vale_${VALE_VERSION}_Linux_64-bit.tar.gz
+# Set working directory
+WORKDIR /src
