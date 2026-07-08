@@ -104,7 +104,7 @@ jobs:
       - name: Verify Tool Versions
         run: |
           docker run --rm ${{ steps.image-tag.outputs.tag }} \
-          bash -c "vale --version && markdownlint-cli2 --version && htmltest --version && hugo version"
+          bash -c "vale --version && markdownlint-cli2 --version && htmltest --version && hugo version && lychee --version"
 
       # Verify interactive bash (README usage)
       - name: Verify Interactive Bash
