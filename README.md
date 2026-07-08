@@ -9,26 +9,71 @@ truth for documentation tool versions across projects.
 
 | Tool | Purpose | Source |
 |---|---|---|
-| [Vale](https://vale.sh) | Prose linter | `jdkato/vale` |
-| [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2) | Markdown linter | `npm` (`^0.22.0`) |
-| [htmltest](https://github.com/wjdp/htmltest) | HTML proofer | `wjdp/htmltest` |
+| [Vale](https://vale.sh) | Prose linter — checks style, consistency, and tone | `jdkato/vale` |
+| [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2) | Markdown linter — catches formatting issues | `npm` (`^0.22.0`) |
+| [htmltest](https://github.com/wjdp/htmltest) | HTML proofer — validates generated site output | `wjdp/htmltest` |
 | [Hugo](https://gohugo.io) | Static site generator | `hugomods/hugo` |
-| [Lychee](https://lychee.cli.rs) | Link checker | `lycheeverse/lychee` |
+| [Lychee](https://lychee.cli.rs) | Link checker — finds broken links in files and pages | `lycheeverse/lychee` |
 
 ## Usage
 
+### Prerequisites
+
+- [Docker](https://docs.docker.com/engine/install/)
+
+### Interactive (local development)
+
+Run individual checks on your documentation by mounting a volume:
+
 ```bash
-# Pull the image
-docker pull ghcr.io/doughgle/docs-as-code:main
+# Lint Markdown files
+docker run --rm -v $(pwd):/src ghcr.io/doughgle/docs-as-code:main \
+  markdownlint-cli2 .
 
-# Verify tool versions
-docker run --rm ghcr.io/doughgle/docs-as-code:main \
-  sh -c 'vale --version && markdownlint-cli2 --version && htmltest --version && hugo version && lychee --version'
+# Check prose style
+docker run --rm -v $(pwd):/src ghcr.io/doughgle/docs-as-code:main \
+  vale .
 
-# Run checks on your documentation
+# Check links
+docker run --rm -v $(pwd):/src ghcr.io/doughgle/docs-as-code:main \
+  lychee .
+
+# Combine all checks in a single pass
 docker run --rm -v $(pwd):/workspace -w /workspace \
   ghcr.io/doughgle/docs-as-code:main \
   sh -c 'markdownlint-cli2 . && vale . && lychee .'
+```
+
+### CI (GitHub Actions)
+
+Use the image as the runner container for a GitHub Actions job:
+
+```yaml
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    container: ghcr.io/doughgle/docs-as-code:main
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lint and check
+        run: |
+          vale .
+          markdownlint-cli2 .
+          lychee .
+
+      - name: Build site
+        run: hugo --minify
+
+      - name: Test HTML
+        run: htmltest
+```
+
+### Verify tool versions
+
+```bash
+docker run --rm ghcr.io/doughgle/docs-as-code:main \
+  sh -c 'vale --version && markdownlint-cli2 --version && htmltest --version && hugo version && lychee --version'
 ```
 
 ## CI
