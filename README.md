@@ -2,8 +2,11 @@
 
 [![Build, publish and sign](https://github.com/doughgle/docs-as-code/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/doughgle/docs-as-code/actions/workflows/docker-publish.yml)
 
-Builder container image for docs-as-code tooling. Used as the single source of
-truth for documentation tool versions across projects.
+A pre-configured Docker image that bundles Hugo, Vale, markdownlint-cli2, htmltest, and Lychee for docs-as-code workflows. Zero setup, consistent environments across team and CI, and one image to maintain instead of many tools per machine — so you catch style issues, broken links, and formatting errors before they reach production. Pull the image, mount your content, and run the checks, or use it directly as a CI runner container to automate quality gates in every pull request.
+
+## Why Docs-as-Code?
+
+Docs-as-code applies software engineering practices — version control, code review, CI/CD, and automated testing — to documentation. Automated builds and parallel work through branches save time. Reduced rework and self-service publishing lower cost. Style enforcement, link validation, and peer review through pull requests raise quality. This image is the engine that makes the pipeline practical: pull it and you have every tool you need, pre-configured and consistent, from local development to production deployment.
 
 ## Included Tools
 
