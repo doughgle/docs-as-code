@@ -6,7 +6,7 @@ FROM hugomods/hugo:exts AS hugo
 FROM lycheeverse/lychee:latest-alpine AS lychee
 
 # Final Stage
-FROM node:20-alpine
+FROM node:26-alpine
 
 # Install System Dependencies
 RUN apk add --no-cache bash git
